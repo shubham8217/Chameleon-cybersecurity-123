@@ -1,0 +1,33 @@
+services:
+  # Backend Service
+  - type: web
+    name: chameleon-backend
+    env: python
+    buildCommand: pip install -r Backend/requirements.txt
+    startCommand: uvicorn Backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: MONGODB_URL
+        sync: false
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: GEOIP_API_URL
+        value: http://ip-api.com/json/
+
+  # Frontend Service
+  - type: web
+    name: chameleon-frontend
+    env: node
+    buildCommand: cd frontend && npm install && npm run build
+    startCommand: cd frontend && npm run preview -- --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: chameleon-backend
+          property: url

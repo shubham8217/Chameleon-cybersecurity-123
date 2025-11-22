@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+pymongo[srv]
+motor
+tensorflow
+numpy
+
+pydantic
+pydantic-settings
+httpx
+reportlab
+python-dotenv
+python-jose[cryptography]
+gunicorn
